@@ -16,20 +16,23 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     $tasks = Task::orderBy('created_at', 'asc')->get();
+    $users = Task::orderBy('id', 'asc')->get();
 
     return view('tasks', [
-        'tasks' => $tasks
+        'tasks' => $tasks,
+        'users' => $users
+        
     ]);
 });
 
-Route::post('/task', function (Request $request) {
-    //
-});
 
 route::delete('/task/{id}', function ($id) {
+    if (Auth::check()) {
         Task::findOrFail($id)->delete();
 
         return redirect('/');
+    }
+    return redirect('/home');
 });
 
 Auth::routes();
@@ -37,6 +40,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/task', function (Request $request) {
+    if (Auth::check()) {
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:191',
     ]);
@@ -49,7 +53,11 @@ Route::post('/task', function (Request $request) {
 
     $task = new Task;
     $task->name = $request->name;
+    $task->user_id = Auth::id();
     $task->save();
 
     return redirect('/');
+    }
+    return redirect('/home');
+
 });

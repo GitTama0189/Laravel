@@ -55,15 +55,23 @@
                                 <td class="table-text">
                                     <div>{{ $task->name }}</div>
                                 </td>
-    <!-- 削除ボタン -->
-    <td>
-        <form action="./task/{{ $task->id }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
+                                <!-- 登録日時 -->
+                                <td>
+                                    <div>{{ $task->created_at}}</div>
+                                </td>
+                                <!-- TODO:ユーザー名 -->
+                                <td>
+                                    <div>{{ $task->user_id}}</div>
+                                </td>
+                                <!-- 削除ボタン -->
+                                <td>
+                                    <form action="./task/{{ $task->id }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
 
-            <button>タスク削除</button>
-        </form>
-    </td>
+                                        <button>タスク削除</button>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
