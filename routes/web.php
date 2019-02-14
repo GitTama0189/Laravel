@@ -15,12 +15,14 @@ use App\Task;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    $tasks = Task::orderBy('created_at', 'asc')->get();
-    $users = Task::orderBy('id', 'asc')->get();
+    $tasks = Task::orderBy('tasks.created_at', 'asc')
+                ->select('tasks.id as task_id','users.id', 'tasks.name as task_name', 'users.name',
+                         'tasks.created_at as task_created_at', 'tasks.updated_at as task_updated_at')
+                ->leftJoin('users', 'tasks.user_id', '=', 'users.id')
+                ->get();
 
     return view('tasks', [
         'tasks' => $tasks,
-        'users' => $users
         
     ]);
 });
@@ -59,5 +61,17 @@ Route::post('/task', function (Request $request) {
     return redirect('/');
     }
     return redirect('/home');
+
+});
+Route::put('/task/{id}', function ($id, Request $request) {
+    if (Auth::check()) {
+        DB::table('tasks')
+            ->where('id', $id)
+            ->update(['name' => $request->name], ['user_id' => Auth::id()]);
+
+        return redirect('/');
+    }
+
+   return redirect('/home');
 
 });

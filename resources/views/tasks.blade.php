@@ -53,24 +53,35 @@
                             <tr>
                                 <!-- タスク名 -->
                                 <td class="table-text">
-                                    <div>{{ $task->name }}</div>
+                                    <div>{{ $task->task_name }}</div>
                                 </td>
                                 <!-- 登録日時 -->
                                 <td>
-                                    <div>{{ $task->created_at}}</div>
+                                    <div>{{ $task->task_created_at}}</div>
                                 </td>
                                 <!-- TODO:ユーザー名 -->
                                 <td>
-                                    <div>{{ $task->user_id}}</div>
+                                    <div>{{ $task->name}}</div>
                                 </td>
                                 <!-- 削除ボタン -->
                                 <td>
-                                    <form action="./task/{{ $task->id }}" method="POST">
+                                    <form action="./task/{{ $task->task_id }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
 
                                         <button>タスク削除</button>
                                     </form>
+                                </td>
+				<td>
+                                <!-- 変更フォーム -->
+                                <form action="./task/{{ $task->task_id }}" method="POST" class="form-horizontal">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                        <div class="col-sm-6">
+                                        <input type="text" name="name" id="task-name" class="form-control">
+                                        </div>
+                                        <button type ="submit">タスク変更</button>
+                                </form>
                                 </td>
                             </tr>
                         @endforeach
