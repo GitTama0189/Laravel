@@ -65,9 +65,11 @@ Route::post('/task', function (Request $request) {
 });
 Route::put('/task/{id}', function ($id, Request $request) {
     if (Auth::check()) {
+	var_dump(Auth::id());
+exit();
         DB::table('tasks')
             ->where('id', $id)
-            ->update(['user_id' => Auth::id(), 'name' => $request->name]);
+            ->update(['name' => $request->name], ['user_id' => Auth::id()]);
 
         return redirect('/');
     }
